@@ -1,68 +1,89 @@
-let add_button = document.querySelector('.add_button');
-var input = document.querySelector('.input1')
-let todo = document.querySelector('.todo')
+//Todo added on press enter
 
-class container {
-    constructor(todoname) {
-        this.createDiv(todoname);
-    }
-
-    createDiv(todoname) {
-
-        let input = document.createElement('input');
-        input.value = todoname;
-        input.disabled = true;
-        input.classList.add('h4')
-        input.type = "text";
-
-        let newtodo = document.createElement('div');
-        newtodo.classList.add('container')
-
-        let Button1 = document.createElement('button');
-        Button1.innerHTML = "✏️";
-        Button1.classList.add('button1');
-
-        let Button2 = document.createElement('button');
-        Button2.innerHTML = "❎";
-        Button2.classList.add('button2');
-
-        todo.appendChild(newtodo);
-
-        newtodo.appendChild(input);
-        newtodo.appendChild(Button1);
-        newtodo.appendChild(Button2);
-
-
-        Button1.addEventListener('click', () => this.edit(input));
-
-        Button2.addEventListener('click', () => this.remove(newtodo));
-
-    }
-
-    edit(input) {
-
-        input.disabled = !input.disabled;
-    }
-
-    remove(container) {
-
-        todo.removeChild(container);
-    }
-
-}
-
-function check() {
-
-    if (input.value != "") {
-        new container(input.value);
-        input.value = "";
-    }
-
-}
-
-add_button.addEventListener('click', check);
 window.addEventListener('keydown', (e) => {
-    if (e.which == 13) {
-        check();
+    if(e.target.value!=''){
+        if (e.which == 13) {
+            addingtodo();
+        }
     }
 });
+//checked todo
+
+function donetodo(donetodobox,textbox){
+   
+    if(!donetodobox.hasAttribute('checked')){
+        donetodobox.setAttribute("checked","")
+        textbox.setAttribute("class",'todocheckbox');
+        
+
+    }
+    else{
+        donetodobox.removeAttribute("checked")
+        textbox.removeAttribute("class",'todocheckbox');
+        
+    }
+}
+
+
+//edit button
+function editbutton(textbox){
+    textbox.disabled=!textbox.disabled;
+}
+
+
+//remove button
+function rmvbutton(container,todo){
+    // console.log("remove");
+    container.removeChild(todo);
+}
+
+
+
+
+function addingtodo(){
+
+    // console.log("inside");
+    
+    //-----creating all element individually & setting its property
+    let todo=document.createElement('div');
+        todo.id="todo1";
+    let donetodobox=document.createElement('input');
+        donetodobox.id="checkingbox";
+        donetodobox.type="checkbox";
+    let textbox=document.createElement('input');
+        textbox.classList.add('todotext');
+        textbox.type="text";
+        var txt= document.getElementById("inputtext").value;
+        textbox.setAttribute('value',txt);
+        textbox.id="todotextid";
+        textbox.setAttribute('disabled','');
+    let edit=document.createElement('button');
+        edit.innerHTML="✏️";
+        edit.id="editing";
+    let rmv=document.createElement('button');
+        rmv.innerHTML="❎";
+        rmv.id="rmvbutton";
+
+    //----appending all element inside todo
+    todo.appendChild(donetodobox);
+    todo.appendChild(textbox);
+    todo.appendChild(edit);
+    todo.appendChild(rmv);
+    //----now appending todo inside the container
+    let container=document.getElementById("container2");
+    container.appendChild(todo);
+
+    //---resetting the input field
+    document.getElementById("inputtext").value="";
+
+    
+
+    donetodobox.addEventListener('change',()=>donetodo(donetodobox,textbox));
+    edit.addEventListener('click',()=>editbutton(textbox));
+    rmv.addEventListener('click',()=>rmvbutton(container,todo))
+
+
+    
+}
+
+$('#addbutton').on('click',addingtodo)
